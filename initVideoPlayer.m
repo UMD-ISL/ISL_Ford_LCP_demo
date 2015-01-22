@@ -20,6 +20,6 @@ function [videoSrc, videoInfo, ...
     playerStatus = 'Start';
     set(handles.bgVidControl, 'Visible', 'on');
     setPlayerStatus(handles, 'toStart');
-    
+    setappdata(handles.videoSlider, 'stopUpdateFrame', 0);
     setfgLoadVideo(handles.Video_Player, 1);
 end

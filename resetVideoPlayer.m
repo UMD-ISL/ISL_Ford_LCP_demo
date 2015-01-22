@@ -1,7 +1,10 @@
-function resetVideoPlayer(handles, statusText)
+function resetVideoPlayer(handles)
 % statusText could be toTerminate / Finished
-    setPlayerStatus(handles, statusText);
-    set(handles.videoSlider, 'value', 1);
-    initFrameInd = 0;
-    video2Slider(handles, initFrameInd);
+%     stopTimer(handles);
+    setPlayerStatus(handles, 'Terminated');
+    setappdata(handles.videoSlider, 'isReset', true);
+    % reset slider first, then change video frame
+    slider2Video(handles, 0);
+    set(handles.numFrameInd, 'String', '1');
+    set(handles.numCurTimeStamp, 'String', 'HH:MM:SS.FFF');
 end

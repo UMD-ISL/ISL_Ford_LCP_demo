@@ -22,7 +22,7 @@ function varargout = demo(varargin)
 
 % Edit the above text to modify the response to help demo
 
-% Last Modified by GUIDE v2.5 20-Jan-2015 03:29:51
+% Last Modified by GUIDE v2.5 22-Jan-2015 06:40:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -56,6 +56,11 @@ function demo_OpeningFcn(hObject, eventdata, handles, varargin)
 
 handles.output = hObject;
 
+handles.timer = timer(...
+    'ExecutionMode', 'fixedRate', ...       % Run timer repeatedly
+    'Period', 1, ...                        % Initial period is 1 sec.
+    'TimerFcn', {@display_number, hObject}); % Specify callback
+
 % Update handles structure
 guidata(hObject, handles);
 
@@ -82,7 +87,8 @@ function videoSlider_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-slider2Video(handles);
+% stopTimer(handles);
+slider2Video(handles, 1);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -101,20 +107,14 @@ function play_Callback(hObject, eventdata, handles)
 % hObject    handle to play (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-try
-    callVideoPlayer(handles, 1);
-catch
-end
-
-
-
+callVideoPlayer(handles, 1);
 
 % --- Executes on button press in exit.
 function exit_Callback(hObject, eventdata, handles)
 % hObject    handle to exit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+MainWindow_CloseRequestFcn(handles.MainWindow, eventdata, handles);
 
 % --- Executes on button press in checkbox1.
 function checkbox1_Callback(hObject, eventdata, handles)
@@ -258,6 +258,15 @@ else
    [handles.videoSrc, handles.videoInfo, ...
        handles.playerStatus] = initVideoPlayer(handles, videoPath);
    
+   % initlize timer
+%    if strcmp(get(handles.timer, 'Running'), 'on')
+%         stop(handles.timer);
+%         set(handles.timer,'Period', round2Ndecimals(1/handles.videoInfo.frameRate, 3));
+%         start(handles.timer);
+%     else               % If timer is stopped, reset its period only.
+%         set(handles.timer,'Period', round2Ndecimals(1/handles.videoInfo.frameRate, 3));
+%    end
+
    guidata(hObject, handles);
 end
 
@@ -268,7 +277,8 @@ function MainWindow_CloseRequestFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: delete(hObject) closes the figure
-
+% stop(handles.timer);
+% delete(handles.timer);
 delete(hObject);
 
 % --- Executes during object creation, after setting all properties.
@@ -284,7 +294,7 @@ function MainWindow_WindowButtonMotionFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % get current mouse position in figure
-pos = get(handles.MainWindow, 'CurrentPoint');
+% pos = get(handles.MainWindow, 'CurrentPoint');
 % changeButtonIcon(pos, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -361,7 +371,7 @@ function stop_Callback(hObject, eventdata, handles)
 % hObject    handle to stop (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-resetVideoPlayer(handles, 'toTerminate');
+resetVideoPlayer(handles);
 
 
 % --- Executes on button press in forward.
@@ -386,3 +396,49 @@ function Map_Display_CreateFcn(hObject, eventdata, handles)
 
 % Hint: place code in OpeningFcn to populate Map_Display
 initMapDisplay(hObject);
+
+
+
+function numFrameInd_Callback(hObject, eventdata, handles)
+% hObject    handle to numFrameInd (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of numFrameInd as text
+%        str2double(get(hObject,'String')) returns contents of numFrameInd as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function numFrameInd_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to numFrameInd (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function numCurTimeStamp_Callback(hObject, eventdata, handles)
+% hObject    handle to numCurTimeStamp (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of numCurTimeStamp as text
+%        str2double(get(hObject,'String')) returns contents of numCurTimeStamp as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function numCurTimeStamp_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to numCurTimeStamp (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

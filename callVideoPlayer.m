@@ -1,26 +1,69 @@
 function callVideoPlayer(handles, isCallback)
-    hPlayButton = handles.play;
-    hVideoPlayer = handles.Video_Player;
+%% Description
+%  CALLVIDEOPLAYER   Call video player show one frame of video.
+%   This function can only be called in two circumstances / cases:
+%   1. called by playbutton callback funtion (play_Callback)
+%   2. called by slider2Video function
+%
+%  Copyright 2014-2015 Intelligent System Lab, Unviersity of Michigan Dearborn.
+
+%% function implementation start
+    hPlayButton = handles.play; % get the handle of the playbutton
+    
     try
-        if isCallback
-            if isToContinue(hPlayButton) ||  isToStart(hPlayButton)
-                setPlayerStatus(handles, 'toPause');
+        if isCallback % check which cirumstance this funcution is called
+            % for case 1
+            if isToContinue(hPlayButton)
+                % change frome 'coninue/start' button to 'pause' button)
+                setPlayerStatus(handles, 'Playing'); % should be playing
+%                 startTimer(handles);
+            elseif isToStart(hPlayButton)
+                try
+                        assert(1 == getVidFrameInd(handles.Video_Player) || ...
+                        2 == getVidFrameInd(handles.Video_Player), 'error');
+                catch
+                    setVidFrameInd(handles.Video_Player, 1);
+                    playOneFrame(handles);
+%                     stopTimer(handles);
+                end
+                setPlayerStatus(handles, 'Playing'); % should be playing 
             else
-                setPlayerStatus(handles, 'toContinue');
+                % for case 1 ( change to 'continue' buttion)
+                setPlayerStatus(handles, 'Paused');
+            end
+        else
+            if ~isToStart(hPlayButton)
+                setPlayerStatus(handles, 'toPause');
+%                 startTimer(handles);
+            else
+                try
+                    assert(2 == getVidFrameInd(handles.Video_Player), 'error');
+                catch
+                    setVidFrameInd(handles.Video_Player, 1);
+                    playOneFrame(handles);
+                end
             end
         end
 
         while isPlaying(hPlayButton) && ~isDone(handles)
             try
-                curFrameInd = getVidFrameInd(hVideoPlayer);
-                video2Slider(handles, curFrameInd);
-                pause(1/handles.videoInfo.frameRate);
+                curFrameInd = getVidFrameInd(handles.Video_Player);
+                set(handles.numFrameInd, 'String', int2str(curFrameInd));
+                set(handles.numCurTimeStamp, 'String', genTimeFormat(curFrameInd, handles.videoInfo.frameRate));
+%                 try
+%                     assert(strcmp('on', get(handles.timer, 'Running')));
+%                 catch
+%                     startTimer(handles);
+%                 end
+                 playOneFrame(handles);
+                pause(1/90);
             catch ME
                 if ~strcmp(ME.identifier, 'MATLAB:class:InvalidHandle')
                     rethrow(ME);
                 end
             end
         end
+%         stopTimer(handles);
         
     catch ME
        %Re-throw error message if it is not related to invalid handle
@@ -28,4 +71,5 @@ function callVideoPlayer(handles, isCallback)
            rethrow(ME);
        end
     end
+%% function implementation end
 end
