@@ -14,6 +14,6 @@ function initSlideBar(handles, vidPlayerAxesPos, videoInfo)
         'visible', 'on', ...
         'Position', vidSliderPos, ...
         'sliderstep', [1 videoInfo.frameRate * timeStep] / videoInfo.numFrame);
-    setappdata(handles.videoSlider, 'stopUpdateFrame', 1);
+    setSliderLock(handles.videoSlider);
     
 end

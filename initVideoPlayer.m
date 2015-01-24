@@ -1,7 +1,7 @@
 function [videoSrc, videoInfo, ...
     playerStatus] = initVideoPlayer(handles, videoPath)
+
     videoSrc = VideoReader(videoPath);
-    
     handles.videoPath = videoPath;
     [videoInfo.numFrame, videoInfo.frameRate] = getVideoInfo(videoSrc);
     
@@ -13,13 +13,14 @@ function [videoSrc, videoInfo, ...
     vidtoWinRatio = 0.45;
     
     vidPlayerAxesPos = resizeVidPlayer(handles, vidFrame, vidtoWinRatio);
-    
-    initSlideBar(handles, vidPlayerAxesPos, videoInfo);
-    
     imshow(vidFrame, 'Parent',  hVideoPlayer);
+    % init player control panel
     playerStatus = 'Start';
     set(handles.bgVidControl, 'Visible', 'on');
     setPlayerStatus(handles, 'toStart');
-    setappdata(handles.videoSlider, 'stopUpdateFrame', 0);
+    
+    initSlideBar(handles, vidPlayerAxesPos, videoInfo);
+    freeSliderLock(handles.videoSlider);
+    
     setfgLoadVideo(handles.Video_Player, 1);
 end

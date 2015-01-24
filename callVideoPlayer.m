@@ -49,14 +49,13 @@ function callVideoPlayer(handles, isCallback)
             if  ~isDone(handles)
                 try
                     curFrameInd = getVidFrameInd(handles.Video_Player);
-                    set(handles.numFrameInd, 'String', int2str(curFrameInd));
-                    set(handles.numCurTimeStamp, 'String', genTimeFormat(curFrameInd, handles.videoInfo.frameRate));
+                    updateTextEditor(handles, curFrameInd);
     %                 try
     %                     assert(strcmp('on', get(handles.timer, 'Running')));
     %                 catch
     %                     startTimer(handles);
     %                 end
-                     playOneFrame(handles);
+                    playOneFrame(handles);
                     pause(1/90);
                 catch ME
                     if ~strcmp(ME.identifier, 'MATLAB:class:InvalidHandle')

@@ -116,6 +116,7 @@ function exit_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 MainWindow_CloseRequestFcn(handles.MainWindow, eventdata, handles);
 
+
 % --- Executes on button press in toggle_Local.
 function toggle_Local_Callback(hObject, eventdata, handles)
 % hObject    handle to toggle_Local (see GCBO)
@@ -157,10 +158,12 @@ if isequal(fileName, 0) || isequal(pathName, 0)
    return;
 else
    videoPath = fullfile(pathName, fileName);
-   disp(['User selected ', videoPath]);
+%    disp(['User selected ', videoPath]);
       
    [handles.videoSrc, handles.videoInfo, ...
        handles.playerStatus] = initVideoPlayer(handles, videoPath);
+   
+    initTextEditor(handles);
    
    % initlize timer
 %    if strcmp(get(handles.timer, 'Running'), 'on')
@@ -497,4 +500,20 @@ function edit4_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in rbLabelMe.
+function rbLabelMe_Callback(hObject, eventdata, handles)
+% hObject    handle to rbLabelMe (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of rbLabelMe
+if get(handles.rbLabelMe, 'value')
+    set(handles.rbLabelMe, 'value', 1)
+    floatManualLabelProgram(handles);
+else
+    set(handles.rbLabelMe, 'value', 0);
+    
 end
