@@ -1,6 +1,6 @@
 function fgDone = isDone(handles)
     curFrameInd = getVidFrameInd(handles.Video_Player);
-    if curFrameInd == handles.videoInfo.numFrame
+    if curFrameInd >= handles.videoInfo.numFrame
         fgDone = 1;
         return
     else

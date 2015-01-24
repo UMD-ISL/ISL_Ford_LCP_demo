@@ -45,31 +45,35 @@ function callVideoPlayer(handles, isCallback)
             end
         end
 
-        while isPlaying(hPlayButton) && ~isDone(handles)
-            try
-                curFrameInd = getVidFrameInd(handles.Video_Player);
-                set(handles.numFrameInd, 'String', int2str(curFrameInd));
-                set(handles.numCurTimeStamp, 'String', genTimeFormat(curFrameInd, handles.videoInfo.frameRate));
-%                 try
-%                     assert(strcmp('on', get(handles.timer, 'Running')));
-%                 catch
-%                     startTimer(handles);
-%                 end
-                 playOneFrame(handles);
-                pause(1/90);
-            catch ME
-                if ~strcmp(ME.identifier, 'MATLAB:class:InvalidHandle')
-                    rethrow(ME);
+        while isPlaying(hPlayButton)
+            if  ~isDone(handles)
+                try
+                    curFrameInd = getVidFrameInd(handles.Video_Player);
+                    set(handles.numFrameInd, 'String', int2str(curFrameInd));
+                    set(handles.numCurTimeStamp, 'String', genTimeFormat(curFrameInd, handles.videoInfo.frameRate));
+    %                 try
+    %                     assert(strcmp('on', get(handles.timer, 'Running')));
+    %                 catch
+    %                     startTimer(handles);
+    %                 end
+                     playOneFrame(handles);
+                    pause(1/90);
+                catch ME
+                    if ~strcmp(ME.identifier, 'MATLAB:class:InvalidHandle')
+                        rethrow(ME);
+                    end
                 end
+            else
+                resetVideoPlayer(handles);
             end
+    %         stopTimer(handles);
         end
-%         stopTimer(handles);
         
-    catch ME
-       %Re-throw error message if it is not related to invalid handle
-       if ~strcmp(ME.identifier, 'MATLAB:class:InvalidHandle')
-           rethrow(ME);
-       end
+        catch ME
+           %Re-throw error message if it is not related to invalid handle
+           if ~strcmp(ME.identifier, 'MATLAB:class:InvalidHandle')
+               rethrow(ME);
+           end
     end
 %% function implementation end
 end
