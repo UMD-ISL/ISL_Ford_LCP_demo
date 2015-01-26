@@ -7,6 +7,7 @@ function [btImg, btselImg, btPos] = initControlButtons(hObject, handles)
         btImg = imread('./icons/reverse.jpg', 'jpg');
         btselImg = imread('./icons/reverse_select.jpg', 'jpg');
         set(hObject, 'cdata', btImg);
+        set(hObject, 'Enable', 'off');
         btPos = get(hObject, 'Position');
         
     elseif strcmp(tagText, 'play')
@@ -14,6 +15,7 @@ function [btImg, btselImg, btPos] = initControlButtons(hObject, handles)
         btImg = imread('./icons/play.jpg', 'jpg');
         btselImg = imread('./icons/play_select.jpg', 'jpg');
         set(hObject, 'cdata', btImg);
+        set(hObject, 'Enable', 'off');
         btPos = get(hObject, 'Position');
         
     elseif strcmp(tagText, 'stop')
@@ -21,12 +23,14 @@ function [btImg, btselImg, btPos] = initControlButtons(hObject, handles)
         btImg = imread('./icons/stop.jpg', 'jpg');
         btselImg = imread('./icons/stop_select.jpg', 'jpg');
         set(hObject, 'cdata', btImg);
+        set(hObject, 'Enable', 'off');
         btPos = get(hObject, 'Position');
     else
         % forward button control
         btImg = imread('./icons/forward.jpg', 'jpg');
         btselImg = imread('./icons/forward_select.jpg', 'jpg');
         set(hObject, 'cdata', btImg);
+        set(hObject, 'Enable', 'off');
         btPos = get(hObject, 'Position');
     end
 end
