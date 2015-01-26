@@ -22,7 +22,7 @@ function varargout = demo(varargin)
 
 % Edit the above text to modify the response to help demo
 
-% Last Modified by GUIDE v2.5 23-Jan-2015 20:13:05
+% Last Modified by GUIDE v2.5 25-Jan-2015 22:16:21
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -458,18 +458,18 @@ function fgShowSpeedinAll_Callback(hObject, eventdata, handles)
 
 
 
-function edit3_Callback(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
+function edTripDate_Callback(hObject, eventdata, handles)
+% hObject    handle to edTripDate (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit3 as text
-%        str2double(get(hObject,'String')) returns contents of edit3 as a double
+% Hints: get(hObject,'String') returns contents of edTripDate as text
+%        str2double(get(hObject,'String')) returns contents of edTripDate as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
+function edTripDate_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edTripDate (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -481,18 +481,18 @@ end
 
 
 
-function edit4_Callback(hObject, eventdata, handles)
-% hObject    handle to edit4 (see GCBO)
+function edStartTime_Callback(hObject, eventdata, handles)
+% hObject    handle to edStartTime (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit4 as text
-%        str2double(get(hObject,'String')) returns contents of edit4 as a double
+% Hints: get(hObject,'String') returns contents of edStartTime as text
+%        str2double(get(hObject,'String')) returns contents of edStartTime as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit4_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit4 (see GCBO)
+function edStartTime_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edStartTime (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
