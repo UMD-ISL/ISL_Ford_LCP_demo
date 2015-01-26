@@ -50,6 +50,7 @@ function callVideoPlayer(handles, isCallback)
                 try
                     curFrameInd = getVidFrameInd(handles.Video_Player);
                     updateTextEditor(handles, curFrameInd);
+                    updateAllAxes(handles, curFrameInd);
     %                 try
     %                     assert(strcmp('on', get(handles.timer, 'Running')));
     %                 catch

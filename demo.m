@@ -22,7 +22,7 @@ function varargout = demo(varargin)
 
 % Edit the above text to modify the response to help demo
 
-% Last Modified by GUIDE v2.5 25-Jan-2015 22:16:21
+% Last Modified by GUIDE v2.5 26-Jan-2015 00:25:56
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -56,10 +56,10 @@ function demo_OpeningFcn(hObject, eventdata, handles, varargin)
 
 handles.output = hObject;
 
-handles.timer = timer(...
-    'ExecutionMode', 'fixedRate', ...       % Run timer repeatedly
-    'Period', 1, ...                        % Initial period is 1 sec.
-    'TimerFcn', {@display_number, hObject}); % Specify callback
+% handles.timer = timer(...
+%     'ExecutionMode', 'fixedRate', ...       % Run timer repeatedly
+%     'Period', 1, ...                        % Initial period is 1 sec.
+%     'TimerFcn', {@display_number, hObject}); % Specify callback
 
 % Update handles structure
 guidata(hObject, handles);
@@ -152,18 +152,14 @@ function Vedio_Open_ClickedCallback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % get vedio file path
-[fileName,pathName] = uigetfile('*.avi','choose a video');
-if isequal(fileName, 0) || isequal(pathName, 0)
+[videoPath.fileName,videoPath.folderPath] = uigetfile('*.avi','choose a video');
+if isequal(videoPath.fileName, 0) || isequal(videoPath.folderPath, 0)
    disp('User pressed cancel')
    return;
 else
-   videoPath = fullfile(pathName, fileName);
-%    disp(['User selected ', videoPath]);
-      
+         
    [handles.videoSrc, handles.videoInfo, ...
        handles.playerStatus] = initVideoPlayer(handles, videoPath);
-   
-    initTextEditor(handles);
    
    % initlize timer
 %    if strcmp(get(handles.timer, 'Running'), 'on')
@@ -516,4 +512,27 @@ if get(handles.rbLabelMe, 'value')
 else
     set(handles.rbLabelMe, 'value', 0);
     
+end
+
+
+% --- Executes on selection change in popSingalResolution.
+function popSingalResolution_Callback(hObject, eventdata, handles)
+% hObject    handle to popSingalResolution (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popSingalResolution contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popSingalResolution
+
+
+% --- Executes during object creation, after setting all properties.
+function popSingalResolution_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popSingalResolution (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
 end
