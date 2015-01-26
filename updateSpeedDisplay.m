@@ -22,5 +22,7 @@ function updateSpeedDisplay(hSpeedDisplay, handles, curFrameInd)
     
     timeData2Display  = Data2Display(:, 1);
     speedData2Display = Data2Display(:, 2);
-    scatter(hSpeedDisplay, timeData2Display, speedData2Display, 'fill', 'magenta');    
+%     plot(hSpeedDisplay, timeData2Display, speedData2Display, 'r-.', 'LineWidth', 2);
+    set(handles.speedPlot, 'XData', timeData2Display);
+    set(handles.speedPlot, 'YData', speedData2Display);
 end

@@ -22,7 +22,7 @@ function varargout = demo(varargin)
 
 % Edit the above text to modify the response to help demo
 
-% Last Modified by GUIDE v2.5 26-Jan-2015 00:25:56
+% Last Modified by GUIDE v2.5 26-Jan-2015 16:46:45
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -56,11 +56,24 @@ function demo_OpeningFcn(hObject, eventdata, handles, varargin)
 
 handles.output = hObject;
 
-% handles.timer = timer(...
-%     'ExecutionMode', 'fixedRate', ...       % Run timer repeatedly
-%     'Period', 1, ...                        % Initial period is 1 sec.
-%     'TimerFcn', {@display_number, hObject}); % Specify callback
+handles.vidtimer = timer(...
+    'ExecutionMode', 'fixedRate', ...       % Run timer repeatedly
+    'Period', 1, ...                        % Initial period is 1 sec.
+    'TimerFcn', {@timerUpdateVideo, hObject}); % Specify callback
 
+handles.sigtimer = timer(...
+    'ExecutionMode', 'fixedRate', ...       % Run timer repeatedly
+    'Period', 1, ...                        % Initial period is 1 sec.
+    'TimerFcn', {@timerUpdateSignals, hObject}); % Specify callback
+
+handles.maptimer = timer(...
+    'ExecutionMode', 'fixedRate', ...       % Run timer repeatedly
+    'Period', 1, ...                        % Initial period is 1 sec.
+    'TimerFcn', {@timerUpdateMap, hObject}); % Specify callback
+
+handles.speedPlot = plot(handles.Speed_Display, 0, 0);
+set(handles.speedPlot, 'Color','red', ...
+        'LineStyle', '-', 'MarkerSize', 20);
 % Update handles structure
 guidata(hObject, handles);
 
@@ -78,7 +91,6 @@ function varargout = demo_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-
 % --- Executes on slider movement.
 function videoSlider_Callback(hObject, eventdata, handles)
 % hObject    handle to videoSlider (see GCBO)
@@ -87,9 +99,11 @@ function videoSlider_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-% stopTimer(handles);
+stopTimer(handles.vidtimer);
+stopTimer(handles.sigtimer);
 slider2Video(handles, 1);
-
+startTimer(handles.vidtimer);
+startTimer(handles.sigtimer);
 
 % --- Executes during object creation, after setting all properties.
 function videoSlider_CreateFcn(hObject, eventdata, handles)
@@ -180,8 +194,13 @@ function MainWindow_CloseRequestFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: delete(hObject) closes the figure
-% stop(handles.timer);
-% delete(handles.timer);
+try
+    stopTimer(handles.vidtimer);
+    delete(handles.vidtimer);
+    stopTimer(handles.sigtimer);
+    delete(handles.sigtimer);
+catch
+end
 delete(hObject);
 
 % --- Executes during object creation, after setting all properties.
@@ -322,8 +341,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-
 function numCurTimeStamp_Callback(hObject, eventdata, handles)
 % hObject    handle to numCurTimeStamp (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -345,115 +362,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-% --- Executes on button press in sigSpeed.
-function sigSpeed_Callback(hObject, eventdata, handles)
-% hObject    handle to sigSpeed (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigSpeed
-
-
-% --- Executes on button press in sigqDEEL.
-function sigqDEEL_Callback(hObject, eventdata, handles)
-% hObject    handle to sigqDEEL (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigqDEEL
-
-
-% --- Executes on button press in sigTi.
-function sigTi_Callback(hObject, eventdata, handles)
-% hObject    handle to sigTi (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigTi
-
-
-% --- Executes on button press in sigTe.
-function sigTe_Callback(hObject, eventdata, handles)
-% hObject    handle to sigTe (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigTe
-
-
-% --- Executes on button press in sigInspVol.
-function sigInspVol_Callback(hObject, eventdata, handles)
-% hObject    handle to sigInspVol (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigInspVol
-
-
-% --- Executes on button press in sigExpVol.
-function sigExpVol_Callback(hObject, eventdata, handles)
-% hObject    handle to sigExpVol (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigExpVol
-
-
-% --- Executes on button press in sigHR.
-function sigHR_Callback(hObject, eventdata, handles)
-% hObject    handle to sigHR (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigHR
-
-
-% --- Executes on button press in sigGSRraw.
-function sigGSRraw_Callback(hObject, eventdata, handles)
-% hObject    handle to sigGSRraw (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigGSRraw
-
-
-% --- Executes on button press in sigPressure.
-function sigPressure_Callback(hObject, eventdata, handles)
-% hObject    handle to sigPressure (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigPressure
-
-
-% --- Executes on button press in sigECGraw.
-function sigECGraw_Callback(hObject, eventdata, handles)
-% hObject    handle to sigECGraw (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigECGraw
-
-% --- Executes on button press in sigBelt.
-function sigBelt_Callback(hObject, eventdata, handles)
-% hObject    handle to sigBelt (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of sigBelt
-
-
-% --- Executes on button press in fgShowSpeedinAll.
-function fgShowSpeedinAll_Callback(hObject, eventdata, handles)
-% hObject    handle to fgShowSpeedinAll (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of fgShowSpeedinAll
-
-
-
 function edTripDate_Callback(hObject, eventdata, handles)
 % hObject    handle to edTripDate (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -461,7 +369,6 @@ function edTripDate_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edTripDate as text
 %        str2double(get(hObject,'String')) returns contents of edTripDate as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function edTripDate_CreateFcn(hObject, eventdata, handles)
@@ -515,19 +422,21 @@ else
 end
 
 
-% --- Executes on selection change in popSingalResolution.
-function popSingalResolution_Callback(hObject, eventdata, handles)
-% hObject    handle to popSingalResolution (see GCBO)
+% --- Executes on selection change in popDisplayResolution.
+function popDisplayResolution_Callback(hObject, eventdata, handles)
+% hObject    handle to popDisplayResolution (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popSingalResolution contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popSingalResolution
+% Hints: contents = cellstr(get(hObject,'String')) returns popDisplayResolution contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popDisplayResolution
+guidata(hObject, handles);
+
 
 
 % --- Executes during object creation, after setting all properties.
-function popSingalResolution_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popSingalResolution (see GCBO)
+function popDisplayResolution_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popDisplayResolution (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -536,3 +445,120 @@ function popSingalResolution_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in fgShowSpeedinAll.
+function fgShowSpeedinAll_Callback(hObject, eventdata, handles)
+% hObject    handle to fgShowSpeedinAll (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of fgShowSpeedinAll
+
+
+% --- Executes on button press in sigBelt.
+function sigBelt_Callback(hObject, eventdata, handles)
+% hObject    handle to sigBelt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigBelt
+
+
+% --- Executes on button press in sigECGraw.
+function sigECGraw_Callback(hObject, eventdata, handles)
+% hObject    handle to sigECGraw (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigECGraw
+
+
+% --- Executes on button press in sigPressure.
+function sigPressure_Callback(hObject, eventdata, handles)
+% hObject    handle to sigPressure (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigPressure
+
+
+% --- Executes on button press in sigGSRraw.
+function sigGSRraw_Callback(hObject, eventdata, handles)
+% hObject    handle to sigGSRraw (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigGSRraw
+
+
+% --- Executes on button press in sigHR.
+function sigHR_Callback(hObject, eventdata, handles)
+% hObject    handle to sigHR (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigHR
+
+
+% --- Executes on button press in sigExpVol.
+function sigExpVol_Callback(hObject, eventdata, handles)
+% hObject    handle to sigExpVol (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigExpVol
+
+
+% --- Executes on button press in sigInspVol.
+function sigInspVol_Callback(hObject, eventdata, handles)
+% hObject    handle to sigInspVol (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigInspVol
+
+
+% --- Executes on button press in sigSpeed.
+function sigSpeed_Callback(hObject, eventdata, handles)
+% hObject    handle to sigSpeed (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigSpeed
+
+
+% --- Executes on button press in sigTe.
+function sigTe_Callback(hObject, eventdata, handles)
+% hObject    handle to sigTe (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigTe
+
+
+% --- Executes on button press in sigqDEEL.
+function sigqDEEL_Callback(hObject, eventdata, handles)
+% hObject    handle to sigqDEEL (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigqDEEL
+
+
+% --- Executes on button press in sigTi.
+function sigTi_Callback(hObject, eventdata, handles)
+% hObject    handle to sigTi (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of sigTi
+
+
+% --- Executes during object creation, after setting all properties.
+function Speed_Display_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Speed_Display (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate Speed_Display

@@ -5,9 +5,12 @@ function [videoSrc, videoInfo, ...
     
     videoPath.fullPath = fullfile(videoPath.folderPath, videoPath.fileName);
     videoSrc = VideoReader(videoPath.fullPath);
+    setappdata(hVideoPlayer, 'videoSrc', videoSrc);
+    
     
     [videoInfo.numFrame, videoInfo.frameRate] = getVideoInfo(videoSrc);
-    
+    setappdata(hVideoPlayer, 'videoInfo', videoInfo);
+        
     curFrameInd = 1;
     setVidFrameInd(hVideoPlayer, curFrameInd);
     vidFrame = read(videoSrc, curFrameInd);
@@ -31,4 +34,13 @@ function [videoSrc, videoInfo, ...
     enableVideoControlButtons(handles);
     
     initTextEditor(handles);
+    
+    indDisplayResolution = get(handles.popDisplayResolution, 'value');
+    textDisplayResolution = get(handles.popDisplayResolution, 'string');
+    DisplayResolution = textDisplayResolution{indDisplayResolution};
+    
+    set(handles.vidtimer, 'Period', 1/videoInfo.frameRate);
+    set(handles.sigtimer, 'Period', str2num(DisplayResolution));
+    startTimer(handles.vidtimer);
+    startTimer(handles.sigtimer);
 end

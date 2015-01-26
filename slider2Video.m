@@ -38,5 +38,4 @@ function slider2Video(handles, isCallback)
     
     % unlock the video player
     setappdata(handles.videoSlider, 'stopUpdateFrame', 0);
-    callVideoPlayer(handles, 0);
 end

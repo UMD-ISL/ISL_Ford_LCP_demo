@@ -1,6 +1,6 @@
 function mallocSpaceForSpeed(handles, OBD)
     
-    dispResolution = get(handles.popSingalResolution, 'value');
+    dispResolution = get(handles.popDisplayResolution, 'value');
     dataResoltuion = 100;
     
     indGlobalData = 1:size(OBD.OBDdata, 1);

@@ -1,5 +1,5 @@
-function stopTimer(handles)
-    if strcmp(get(handles.timer, 'Running'), 'on')
-        stop(handles.timer);
+function stopTimer(hTimer)
+    if strcmp(get(hTimer, 'Running'), 'on')
+        stop(hTimer);
     end
 end

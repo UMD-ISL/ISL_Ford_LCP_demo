@@ -1,8 +1,9 @@
 function curFrameInd = playOneFrame(handles)
     hVideoPlayer    = handles.Video_Player;
-    hVideoSrc       = handles.videoSrc;
+%     hVideoSrc       = handles.videoSrc;
+    videoSrc = getappdata(hVideoPlayer, 'videoSrc');
     curFrameInd = getVidFrameInd(hVideoPlayer);
-    frame = read(hVideoSrc, curFrameInd);
+    frame = read(videoSrc, curFrameInd);
     
     showFrameOnAxis(hVideoPlayer, frame);
     
