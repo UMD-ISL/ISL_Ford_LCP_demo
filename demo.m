@@ -71,9 +71,10 @@ handles.maptimer = timer(...
     'Period', 1, ...                        % Initial period is 1 sec.
     'TimerFcn', {@timerUpdateMap, hObject}); % Specify callback
 
-handles.speedPlot = plot(handles.Speed_Display, 0, 0);
+handles.speedPlot = plot(handles.Speed_Display, [0 1], [1 1]);
 set(handles.speedPlot, 'Color','red', ...
-        'LineStyle', '-', 'MarkerSize', 20);
+        'LineStyle', '-',...
+        'Marker', '.', 'MarkerSize', 10);
 % Update handles structure
 guidata(hObject, handles);
 
