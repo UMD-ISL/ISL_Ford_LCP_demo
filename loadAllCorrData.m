@@ -1,4 +1,4 @@
-function loadAllCorrData(handles, folderPath)
+function loadAllCorrData(handles, displayResolution, folderPath)
     OBDdataFile = [folderPath, 'OBDoutput.mat'];
     if exist(OBDdataFile, 'file')
         Signals.OBD = load(OBDdataFile);
@@ -7,5 +7,5 @@ function loadAllCorrData(handles, folderPath)
         errordlg('OBD Data File not found','File Error');
     end
     
-    mallocSpaceForSignals(handles, Signals);
+    mallocSpaceForSignals(handles, displayResolution, Signals);
 end

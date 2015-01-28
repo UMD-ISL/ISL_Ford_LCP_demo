@@ -1,3 +1,3 @@
-function mallocSpaceForSignals(handles, Signals)
-    mallocSpaceForSpeed(handles, Signals.OBD);
+function mallocSpaceForSignals(handles, displayResolution, Signals)
+    mallocSpaceForSpeed(handles, displayResolution, Signals.OBD);
 end

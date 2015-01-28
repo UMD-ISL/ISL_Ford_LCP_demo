@@ -20,7 +20,11 @@ function [videoSrc, videoInfo, ...
     imshow(vidFrame, 'Parent', hVideoPlayer);
 %     showFrameOnAxis(hVideoPlayer, vidFrame);
     
-    loadAllCorrData(handles, videoPath.folderPath);
+    indDisplayResolution = get(handles.popDisplayResolution, 'value');
+    textDisplayResolution = get(handles.popDisplayResolution, 'string');
+    displayResolution = str2num(textDisplayResolution{indDisplayResolution});
+    
+    loadAllCorrData(handles, displayResolution, videoPath.folderPath);
         
     playerStatus = 'Start';
     setPlayerStatus(handles, 'toStart');
@@ -35,12 +39,8 @@ function [videoSrc, videoInfo, ...
     
     initTextEditor(handles);
     
-    indDisplayResolution = get(handles.popDisplayResolution, 'value');
-    textDisplayResolution = get(handles.popDisplayResolution, 'string');
-    DisplayResolution = textDisplayResolution{indDisplayResolution};
-    
     set(handles.vidtimer, 'Period', 1/videoInfo.frameRate);
-    set(handles.sigtimer, 'Period', str2num(DisplayResolution));
+    set(handles.sigtimer, 'Period', displayResolution);
     startTimer(handles.vidtimer);
     startTimer(handles.sigtimer);
 end
